@@ -7,6 +7,7 @@ import {
   type Subcategory,
 } from "@/lib/types";
 import ResultBadge from "@/components/ResultBadge";
+import AdBanner from "@/components/AdBanner";
 
 interface PageProps {
   searchParams: Promise<{
@@ -31,14 +32,14 @@ export default async function HomePage({ searchParams }: PageProps) {
     ? naturalLanguageSearch(ask, { limit: 10 })
     : [];
 
-  // 通常検索（キーワード/税目）
-  const results = searchCases({
-    subcategory: subcategory || null,
-    q: q || null,
-  });
+  // 通常検索（キーワード/税目）— 検索条件がある時のみ実行
+  const isFiltered = subcategory !== "" || q !== "";
+  const results = isFiltered
+    ? searchCases({ subcategory: subcategory || null, q: q || null })
+    : [];
 
   const total = getCaseCount();
-  const isFiltered = subcategory !== "" || q !== "";
+  const hasSearched = isFiltered || isAskMode;
 
   return (
     <div className="space-y-8">
@@ -268,8 +269,11 @@ export default async function HomePage({ searchParams }: PageProps) {
         </section>
       )}
 
-      {/* 通常検索結果（自然文検索モード中は非表示） */}
-      {!isAskMode && (
+      {/* 広告バナー（検索実行後に表示） */}
+      {hasSearched && <AdBanner />}
+
+      {/* 通常検索結果（検索条件がある時のみ表示） */}
+      {!isAskMode && isFiltered && (
         <section className="space-y-3">
           <div className="flex items-baseline justify-between">
             <h3 className="text-lg font-semibold">
