@@ -47,7 +47,7 @@ export default async function HomePage({ searchParams }: PageProps) {
           税務で困ったときに、似た裁判例を探す。
         </h2>
         <p className="text-sm text-gray-600 dark:text-gray-400">
-          収録 {total} 件（全てサンプルデータ）。検索・表示のみで、法的助言は行いません。
+          収録 {total} 件。検索・表示のみで、法的助言は行いません。
         </p>
       </section>
 
